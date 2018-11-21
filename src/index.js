@@ -18,7 +18,7 @@ try {
 	return process.exit(1)
 }
 
-const MAX_TIME_BETWEEN_PUSHES = 2000
+const MAX_TIME_BETWEEN_PUSHES = 500
 
 const AWS = require("aws-sdk")
 AWS.config.update({ region: config.awsCredentials.region })
