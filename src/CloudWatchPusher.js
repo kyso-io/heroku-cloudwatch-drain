@@ -1,17 +1,16 @@
-"use strict";
 
 class CloudWatchPusher {
 	constructor(cloudWatchInstance, group, stream) {
-		this.cloudWatchInstance = cloudWatchInstance;
-		this.group = group;
-		this.stream = stream;
-		this.sequenceToken = null;
+		this.cloudWatchInstance = cloudWatchInstance
+		this.group = group
+		this.stream = stream
+		this.sequenceToken = null
 
-		this.lastPushCompleted = true;
+		this.lastPushCompleted = true
 	}
 
 	isLocked() {
-		return !this.lastPushCompleted;
+		return !this.lastPushCompleted
 	}
 
 	push(messages) {
@@ -20,15 +19,20 @@ class CloudWatchPusher {
 			logGroupName: this.group,
 			logStreamName: this.stream,
 			sequenceToken: this.sequenceToken,
-		};
+		}
 
-		this.lastPushCompleted = false;
+		this.lastPushCompleted = false
 
-		return this.cloudWatchInstance.putLogEvents(params).promise().then(data => {
-			this.lastPushCompleted = true;
-			this.sequenceToken = data.nextSequenceToken;
-		});
+		return this.cloudWatchInstance.putLogEvents(params).promise()
+			.then(data => {
+				this.lastPushCompleted = true
+				this.sequenceToken = data.nextSequenceToken
+			})
+			.catch(err => {
+				console.log(`got error`)
+				console.error(err)
+			})
 	}
 }
 
-module.exports = CloudWatchPusher;
+module.exports = CloudWatchPusher

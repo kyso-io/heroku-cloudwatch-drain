@@ -1,29 +1,29 @@
 function isValid(log, filters) {
 	if (!log || !log.trim()) {
-		return false;
+		return false
 	}
 
 	for (let i = 0; i < filters.length; i++) {
 		if (filters[i].test(log)) {
-			return false;
+			return false
 		}
 	}
 
-	return true;
+	return true
 }
 
 class MessagesBuffer {
 	constructor(filters) {
-		this.messages = [];
-		this.filters = filters || [];
+		this.messages = []
+		this.filters = filters || []
 	}
 
 	getMessagesCount() {
-		return this.messages.length;
+		return this.messages.length
 	}
 
 	clearMessages() {
-		this.messages = [];
+		this.messages = []
 	}
 
 	addLog(log) {
@@ -31,10 +31,10 @@ class MessagesBuffer {
 			this.messages.push({
 				timestamp: Date.now(),
 				message: log.trim(),
-			});
+			})
 		}
 	}
 }
 
-module.exports = MessagesBuffer;
-module.exports.isValid = isValid;
+module.exports = MessagesBuffer
+module.exports.isValid = isValid

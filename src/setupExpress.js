@@ -1,10 +1,10 @@
-const app = require("express")();
-const bodyParser = require("body-parser");
+const app = require("express")()
+const bodyParser = require("body-parser")
 
-app.use(bodyParser.raw({ type: "application/logplex-1", limit: "10mb" }));
+app.use(bodyParser.raw({ type: "application/logplex-1", limit: "10mb" }))
 
 function parseMessages(body) {
-	return body.replace(/^\d+ /, "").split(/\n\d+ /);
+	return body.replace(/^\d+ /, "").split(/\n\d+ /)
 }
 
 module.exports = function(accessToken) {
@@ -13,30 +13,30 @@ module.exports = function(accessToken) {
 			if (req.query.accessToken !== accessToken) {
 				return res.status(401).json({
 					message: "Invalid token",
-				});
+				})
 			}
 
-			next();
-		});
+			next()
+		})
 
 		app.post("/log", function(req, res) {
-			res.status(200).end("OK");
+			res.status(200).end("OK")
 
-			const body = String(req.body.toString("utf8"));
+			const body = String(req.body.toString("utf8"))
 			if (!body) {
-				return;
+				return
 			}
 
-			const messages = parseMessages(body);
-			messages.forEach(message => onNewMessage(message));
-		});
+			const messages = parseMessages(body)
+			messages.forEach(message => onNewMessage(message))
+		})
 
 		app.use(function(req, res) {
-			res.status(400).end("Invalid request");
-		});
+			res.status(400).end("Invalid request")
+		})
 
-		return app;
-	};
-};
+		return app
+	}
+}
 
-module.exports.parseMessages = parseMessages;
+module.exports.parseMessages = parseMessages

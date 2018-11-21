@@ -1,4 +1,3 @@
-"use strict";
 
 function getLogGroup(cloudwatchlogs, name) {
 	return cloudwatchlogs
@@ -7,8 +6,8 @@ function getLogGroup(cloudwatchlogs, name) {
 		})
 		.promise()
 		.then(info => {
-			return info.logGroups.find(logGroup => logGroup.logGroupName === name);
-		});
+			return info.logGroups.find(logGroup => logGroup.logGroupName === name)
+		})
 }
 
 function createLogGroup(cloudwatchlogs, name) {
@@ -16,7 +15,7 @@ function createLogGroup(cloudwatchlogs, name) {
 		.createLogGroup({
 			logGroupName: name,
 		})
-		.promise();
+		.promise()
 }
 
 function createLogStream(cloudwatchlogs, group, stream) {
@@ -25,27 +24,34 @@ function createLogStream(cloudwatchlogs, group, stream) {
 			logGroupName: group,
 			logStreamName: stream,
 		})
-		.promise();
+		.promise()
 }
 
 function setup(cloudwatchlogs, groupName, streamName) {
 	return getLogGroup(cloudwatchlogs, groupName)
 		.then(logGroup => {
 			if (!logGroup) {
-				return createLogGroup(cloudwatchlogs, groupName);
+				return createLogGroup(cloudwatchlogs, groupName)
 			}
 		})
 		.then(() => {
 			return createLogStream(cloudwatchlogs, groupName, streamName)
 				.then(() => '')
 				.catch((err) => {
-					console.log(`Log stream ${streamName} already exists, using it`)
-					return ''
+					return cloudwatchlogs.describeLogStreams({
+							logGroupName: groupName,
+							logStreamNamePrefix: streamName,
+							limit: 1
+					}).promise().then(({ logStreams }) => {
+						return logStreams[0]
+					}).catch(err => {
+						console.error(err)
+					})
 				})
-		});
+		})
 }
 
-module.exports = setup;
-module.exports.getLogGroup = getLogGroup;
-module.exports.createLogGroup = createLogGroup;
-module.exports.createLogStream = createLogStream;
+module.exports = setup
+module.exports.getLogGroup = getLogGroup
+module.exports.createLogGroup = createLogGroup
+module.exports.createLogStream = createLogStream
