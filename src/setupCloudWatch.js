@@ -36,7 +36,12 @@ function setup(cloudwatchlogs, groupName, streamName) {
 			}
 		})
 		.then(() => {
-			return createLogStream(cloudwatchlogs, groupName, streamName);
+			return createLogStream(cloudwatchlogs, groupName, streamName)
+				.then(() => '')
+				.catch((err) => {
+					console.log(`Log stream ${streamName} already exists, using it`)
+					return ''
+				})
 		});
 }
 
