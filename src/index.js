@@ -27,7 +27,7 @@ AWS.config.update({ region: config.awsCredentials.region });
 const cloudWatchLogsInstance = new AWS.CloudWatchLogs();
 const cloudWatchInstance = new AWS.CloudWatch();
 
-const LOG_STREAM = config.logStreamPrefix + Math.random().toString().substr(2);
+const LOG_STREAM = config.logStreamPrefix;
 
 const setupWebServer = require("./setupExpress")(config.accessToken);
 const setupCloudWatch = require("./setupCloudWatch");
