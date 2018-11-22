@@ -4,7 +4,8 @@ const bodyParser = require("body-parser")
 app.use(bodyParser.raw({ type: "application/logplex-1", limit: "10mb" }))
 
 function parseMessages(body) {
-	if (body.split(' - ').length > 1) {
+	if (body.split(' - {').length > 1) {
+		console.log(body)
 		return body.split(' - ')[1].replace(/^\d+ /, "").split(/\n\d+ /)
 	} else {
 		return body.replace(/^\d+ /, "").split(/\n\d+ /)
