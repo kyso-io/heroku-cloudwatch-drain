@@ -4,7 +4,12 @@ const bodyParser = require("body-parser")
 app.use(bodyParser.raw({ type: "application/logplex-1", limit: "10mb" }))
 
 function parseMessages(body) {
-	return body.replace(/^\d+ /, "").split(/\n\d+ /)
+	if (body.split(' - ').length > 1) {
+		return body.split(' - ')[1].replace(/^\d+ /, "").split(/\n\d+ /)
+	} else {
+		return body.replace(/^\d+ /, "").split(/\n\d+ /)
+	}
+
 }
 
 module.exports = function(accessToken) {
@@ -21,7 +26,6 @@ module.exports = function(accessToken) {
 
 		app.post("/log", function(req, res) {
 			res.status(200).end("OK")
-
 			const body = String(req.body.toString("utf8"))
 			if (!body) {
 				return
