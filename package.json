@@ -7,6 +7,7 @@
   "dependencies": {
     "aws-sdk": "^2.90.0",
     "body-parser": "^1.17.2",
+    "concurrently": "^4.1.1",
     "express": "^4.15.3"
   },
   "devDependencies": {
@@ -14,7 +15,11 @@
     "request": "^2.81.0"
   },
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha test"
+    "test": "node ./node_modules/mocha/bin/mocha test",
+    "api": "node bin/node-heroku-cloudwatch-drain.js ./config/api.js",
+    "ui": "node bin/node-heroku-cloudwatch-drain.js ./config/ui.js",
+    "auth": "node bin/node-heroku-cloudwatch-drain.js ./config/auth.js",
+    "start": "concurrently \"yarn run api\" \"yarn run ui\" \"yarn run auth\" "
   },
   "bin": {
     "node-heroku-cloudwatch-drain": "bin/node-heroku-cloudwatch-drain.js"
